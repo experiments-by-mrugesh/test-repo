@@ -1,5 +1,5 @@
 /**
- * Example tests for git-wt-test-repo
+ * Example tests for test-repo
  */
 
 const assert = require('assert');

@@ -1,4 +1,4 @@
-# git-wt-test-repo
+# test-repo
 
 Test repository for [git-wt](https://github.com/raisedadead/git-wt) development.
 
