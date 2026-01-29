@@ -20,7 +20,7 @@ This repository serves as a test bed for developing and testing git-wt, a Git wo
 
 ```bash
 # Clone with git-wt
-git wt clone git@github.com:raisedadead/git-wt-test-repo.git
+git wt clone https://github.com/raisedadead/test-repo.git
 
 # Create worktree from issue
 git wt new --issue 1
