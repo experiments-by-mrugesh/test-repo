@@ -1,13 +1,13 @@
 {
-  "name": "gitwt-test-repo",
+  "name": "git-wt-test-repo",
   "version": "1.0.0",
-  "description": "Test repository for gitwt development",
+  "description": "Test repository for git-wt development",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "test": "node tests/example.test.js"
   },
-  "keywords": ["gitwt", "test", "worktree"],
+  "keywords": ["git-wt", "test", "worktree"],
   "author": "raisedadead",
   "license": "MIT"
 }
