@@ -1,6 +1,6 @@
 /**
- * gitwt-test-repo
- * Test repository for gitwt development
+ * test-repo
+ * Test repository for git-wt development
  */
 
 const config = {
@@ -9,7 +9,7 @@ const config = {
 };
 
 function main() {
-  console.log('gitwt-test-repo started');
+  console.log('test-repo started');
   console.log('Config:', config);
 }
 

@@ -1,10 +1,10 @@
-# gitwt-test-repo
+# test-repo
 
-Test repository for [gitwt](https://github.com/raisedadead/gitwt) development.
+Test repository for [git-wt](https://github.com/raisedadead/git-wt) development.
 
 ## What is this?
 
-This repository serves as a test bed for developing and testing gitwt, a Git worktree manager with bare repo support.
+This repository serves as a test bed for developing and testing git-wt, a Git worktree manager with bare repo support.
 
 ## Features for Testing
 
@@ -19,8 +19,8 @@ This repository serves as a test bed for developing and testing gitwt, a Git wor
 ## Usage
 
 ```bash
-# Clone with gitwt
-git wt clone git@github.com:raisedadead/gitwt-test-repo.git
+# Clone with git-wt
+git wt clone https://github.com/raisedadead/test-repo.git
 
 # Create worktree from issue
 git wt new --issue 1
