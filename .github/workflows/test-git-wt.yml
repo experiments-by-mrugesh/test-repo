@@ -27,13 +27,8 @@ jobs:
       - name: Create test config with hooks
         run: |
           mkdir -p $HOME/.config/git-wt
-          cat > $HOME/.config/git-wt/config.toml << 'TOML'
-          worktree_root = "/tmp/worktrees"
-
-          [hooks]
-          post_clone = ["touch /tmp/marker_post_clone"]
-          post_add = ["touch /tmp/marker_post_add"]
-          TOML
+          printf '%s\n' 'worktree_root = "/tmp/worktrees"' '' '[hooks]' 'post_clone = ["touch /tmp/marker_post_clone"]' 'post_add = ["touch /tmp/marker_post_add"]' > $HOME/.config/git-wt/config.toml
+          cat $HOME/.config/git-wt/config.toml
 
       - name: Test clone command
         run: |
