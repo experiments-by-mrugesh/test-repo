@@ -3,6 +3,7 @@ name: Test git-wt
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   test-git-wt:
