@@ -16,16 +16,10 @@ jobs:
         with:
           go-version: "1.21"
 
-      - name: Checkout git-wt repo
-        uses: actions/checkout@v4
-        with:
-          repository: raisedadead/git-wt
-          token: ${{ secrets.GIT_WT_TOKEN }}
-          path: git-wt-src
-
       - name: Build and install git-wt
         run: |
-          cd git-wt-src
+          git clone https://github.com/raisedadead/git-wt.git /tmp/git-wt-src
+          cd /tmp/git-wt-src
           mkdir -p $HOME/bin
           go build -o $HOME/bin/git-wt ./cmd/git-wt
           echo "$HOME/bin" >> $GITHUB_PATH
