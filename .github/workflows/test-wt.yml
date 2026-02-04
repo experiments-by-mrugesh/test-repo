@@ -50,7 +50,7 @@ jobs:
       - name: Test delete command
         run: |
           cd /tmp/worktrees/test-repo
-          wt delete test/feature
+          wt delete test/feature -y
           test ! -d /tmp/worktrees/test-repo/test-feature || (echo "FAIL: delete did not remove directory" && exit 1)
           echo "PASS: delete command works"
 
