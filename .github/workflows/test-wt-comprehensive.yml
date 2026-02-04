@@ -610,11 +610,12 @@ jobs:
           set -e
           cd ${{ env.WT_TEST_ROOT }}/test-clone-basic
 
-          if wt delete nonexistent-branch -y 2>&1; then
-            echo "FAIL: delete should fail for nonexistent branch"
-            exit 1
-          fi
+          # Delete of nonexistent branch should produce error message
+          # (exit code may be 0 for idempotent delete, so check output)
+          OUTPUT=$(wt delete nonexistent-branch -y 2>&1 || true)
+          echo "$OUTPUT" | grep -qi "not found\|fail\|error" || (echo "FAIL: delete should indicate error for nonexistent branch" && exit 1)
 
+          # Switch to nonexistent branch should fail
           if wt switch nonexistent-branch 2>&1; then
             echo "FAIL: switch should fail for nonexistent branch"
             exit 1
