@@ -1,0 +1,67 @@
+name: Validate Fixture Integrity
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 0 * * 0" # Weekly check
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate required branches exist
+        run: |
+          REQUIRED_BRANCHES=(
+            "main"
+            "feature/auth"
+            "feature/nested/deep"
+            "develop"
+            "bugfix-123"
+          )
+          MISSING=0
+          for branch in "${REQUIRED_BRANCHES[@]}"; do
+            if ! git ls-remote --exit-code origin "refs/heads/$branch" > /dev/null 2>&1; then
+              echo "❌ MISSING BRANCH: $branch"
+              MISSING=1
+            else
+              echo "✓ Branch exists: $branch"
+            fi
+          done
+          exit $MISSING
+
+      - name: Validate required files exist
+        run: |
+          REQUIRED_FILES=(
+            ".git-wt.toml"
+            ".env"
+            ".envrc"
+            ".gitignore"
+            ".nvmrc"
+            "package.json"
+            "README.md"
+            "src/app.js"
+            "src/index.js"
+            "tests/example.test.js"
+          )
+          MISSING=0
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ MISSING FILE: $file"
+              MISSING=1
+            else
+              echo "✓ File exists: $file"
+            fi
+          done
+          exit $MISSING
+
+      - name: Validate .git-wt.toml config
+        run: |
+          echo "Checking .git-wt.toml..."
+          grep -q "default_remote" .git-wt.toml || (echo "❌ Missing default_remote" && exit 1)
+          grep -q "\[hooks\]" .git-wt.toml || (echo "❌ Missing [hooks] section" && exit 1)
+          echo "✓ .git-wt.toml is valid"
