@@ -284,7 +284,8 @@ jobs:
           wt add to-delete-y
           test -d to-delete-y || (echo "FAIL: setup failed" && exit 1)
 
-          wt delete to-delete-y -y
+          # Note: --force needed because post_add hook creates untracked marker file
+          wt delete to-delete-y -y --force
           test ! -d to-delete-y || (echo "FAIL: directory should be deleted" && exit 1)
 
           echo "PASS: Delete with -y flag"
@@ -295,7 +296,7 @@ jobs:
           cd ${{ env.WT_TEST_ROOT }}/test-clone-basic
 
           wt add to-delete-alias
-          wt rm to-delete-alias -y
+          wt rm to-delete-alias -y --force
           test ! -d to-delete-alias || (echo "FAIL: 'rm' alias did not work" && exit 1)
 
           echo "PASS: Delete using 'rm' alias"
@@ -333,7 +334,7 @@ jobs:
           echo "$OUTPUT" | grep -qi "dry run" || (echo "FAIL: dry-run output missing" && exit 1)
 
           # Clean up
-          wt delete to-delete-dryrun -y
+          wt delete to-delete-dryrun -y --force
 
           echo "PASS: Delete dry-run"
 
@@ -343,7 +344,7 @@ jobs:
           cd ${{ env.WT_TEST_ROOT }}/test-clone-basic
 
           wt add to-delete-json
-          OUTPUT=$(wt delete to-delete-json -y --json)
+          OUTPUT=$(wt delete to-delete-json -y --force --json)
 
           echo "$OUTPUT" | jq -e '.success == true' || (echo "FAIL: JSON success not true" && exit 1)
           echo "$OUTPUT" | jq -e '.data.branch == "to-delete-json"' || (echo "FAIL: JSON branch mismatch" && exit 1)
