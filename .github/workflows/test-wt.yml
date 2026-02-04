@@ -1,4 +1,4 @@
-name: Test git-wt
+name: Test wt
 
 on:
   push:
@@ -6,34 +6,34 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-git-wt:
+  test-wt:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repo
         uses: actions/checkout@v4
 
-      - name: Set up Go 1.21
+      - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.21"
+          go-version: stable
 
-      - name: Build and install git-wt
+      - name: Build and install wt
         run: |
-          git clone https://github.com/raisedadead/git-wt.git /tmp/git-wt-src
-          cd /tmp/git-wt-src
+          git clone https://github.com/raisedadead/wt.git /tmp/wt-src
+          cd /tmp/wt-src
           mkdir -p $HOME/bin
-          go build -o $HOME/bin/git-wt ./cmd/git-wt
+          go build -o $HOME/bin/wt ./cmd/wt
           echo "$HOME/bin" >> $GITHUB_PATH
 
       - name: Create test config with hooks
         run: |
-          mkdir -p $HOME/.config/git-wt
-          printf '%s\n' 'worktree_root = "/tmp/worktrees"' '' '[hooks]' 'post_clone = ["touch /tmp/marker_post_clone"]' 'post_add = ["touch /tmp/marker_post_add"]' > $HOME/.config/git-wt/config.toml
-          cat $HOME/.config/git-wt/config.toml
+          mkdir -p $HOME/.config/wt
+          printf '%s\n' 'worktree_root = "/tmp/worktrees"' '' '[hooks]' 'post_clone = ["touch /tmp/marker_post_clone"]' 'post_add = ["touch /tmp/marker_post_add"]' > $HOME/.config/wt/config.toml
+          cat $HOME/.config/wt/config.toml
 
       - name: Test clone command
         run: |
-          git-wt clone ${{ github.server_url }}/${{ github.repository }} test-repo
+          wt clone ${{ github.server_url }}/${{ github.repository }} test-repo
           test -d /tmp/worktrees/test-repo/main || (echo "FAIL: clone did not create main worktree" && exit 1)
           test -f /tmp/marker_post_clone || (echo "FAIL: post_clone hook did not run" && exit 1)
           echo "PASS: clone command works"
@@ -41,7 +41,7 @@ jobs:
       - name: Test add with branch flattening
         run: |
           cd /tmp/worktrees/test-repo
-          git-wt add test/feature
+          wt add test/feature
           test -d /tmp/worktrees/test-repo/test-feature || (echo "FAIL: directory not flattened" && exit 1)
           cd test-feature && test "$(git branch --show-current)" = "test/feature" || (echo "FAIL: branch name wrong" && exit 1)
           test -f /tmp/marker_post_add || (echo "FAIL: post_add hook did not run" && exit 1)
@@ -50,15 +50,15 @@ jobs:
       - name: Test delete command
         run: |
           cd /tmp/worktrees/test-repo
-          git-wt delete test/feature
+          wt delete test/feature
           test ! -d /tmp/worktrees/test-repo/test-feature || (echo "FAIL: delete did not remove directory" && exit 1)
           echo "PASS: delete command works"
 
       - name: Test list command
         run: |
           cd /tmp/worktrees/test-repo
-          git-wt list
-          git-wt list --json | jq .
+          wt list
+          wt list --json | jq .
           echo "PASS: list command works"
 
       - name: Cleanup
