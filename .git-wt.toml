@@ -1,0 +1,5 @@
+default_base_branch = "main"
+default_remote = "origin"
+
+[hooks]
+post_add = ["echo 'test hook ran'"]
